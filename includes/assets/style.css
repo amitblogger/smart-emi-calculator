@@ -1,0 +1,116 @@
+/* === Smart EMI Calculator Styles === */
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #222222;
+  --primary-color: #007bff;
+  --card-color: #f9f9f9;
+  --accent-color: #007bff;
+  --border-radius: 12px;
+}
+
+body.dark-mode {
+  --bg-color: #1e1e1e;
+  --text-color: #eeeeee;
+  --card-color: #2a2a2a;
+  --accent-color: #66aaff;
+}
+
+.emi-calculator-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.emi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.emi-header h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+#theme-toggle {
+  font-size: 1.3rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.emi-inputs label {
+  display: block;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+
+.emi-inputs input[type="range"] {
+  width: 100%;
+  margin-top: 5px;
+}
+
+.emi-inputs span {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.emi-inputs select {
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#calculate-btn, #download-pdf {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+#calculate-btn:hover, #download-pdf:hover {
+  background-color: #0056b3;
+}
+
+.emi-results {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.emi-results h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+canvas#emi-chart {
+  margin: 1.5rem auto;
+  display: block;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .emi-calculator-container {
+    padding: 1rem;
+  }
+
+  .emi-header h2 {
+    font-size: 1.4rem;
+  }
+}
