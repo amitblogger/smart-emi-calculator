@@ -1,479 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="Calculate your loan EMI easily with our Smart EMI Calculator. Get detailed breakdowns, charts, and export reports to PDF. Mobile-friendly and fast.">
-    <title>Smart EMI Calculator – Calculate Your Loan EMI Instantly</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Smart EMI Calculator – Calculate Your Loan EMI Instantly</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<!-- TailwindCSS -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Calculator",
-      "name": "Smart EMI Calculator",
-      "description": "Calculate monthly EMI, total interest, and total payment for your loan with interactive charts and PDF export.",
-      "url": "https://yourwebsite.com/emi-calculator", "applicationCategory": "Finance"
-    }
-    </script>
+<!-- SEO Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Calculator",
+  "name": "Smart EMI Calculator",
+  "description": "Calculate monthly EMI, total interest, and total payment for your loan with interactive charts and PDF export.",
+  "url": "https://yourwebsite.com/emi-calculator",
+  "applicationCategory": "Finance"
+}
+</script>
 
-    <style>
-        /* Apply Inter font and theme variables */
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            /* Define default light mode variables (using a slightly warmer palette) */
-            --bg-color: #fef2f2; /* Tailwind red-50 */
-            --text-color: #334155; /* Tailwind slate-700 */
-            --card-bg: #ffffff; /* White */
-            --primary-accent: #ef4444; /* Tailwind red-500 */
-            --secondary-accent: #dc2626; /* Tailwind red-600 */
-            --border-color: #fecaca; /* Tailwind red-200 */
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --input-bg: #ffffff;
-            --input-border: #d1d5db; /* Tailwind gray-300 */
-            --section-bg: #f9fafb; /* Tailwind gray-50 for results cards */
-        }
+<style>
+  /* Theme Variables */
+  body {
+    font-family: 'Inter', sans-serif;
+    --primary: #3b82f6; /* blue-500 */
+    --secondary: #2563eb; /* blue-600 */
+    --light-bg: #eff6ff;
+    --dark-bg: #1f2937;
+    --text-light: #1f2937;
+    --text-dark: #f9fafb;
+    --section-bg-light: #ffffff;
+    --section-bg-dark: #374151;
+    transition: background 0.3s, color 0.3s;
+    background: var(--light-bg);
+    color: var(--text-light);
+  }
+  body.dark {
+    background: var(--dark-bg);
+    color: var(--text-dark);
+  }
+  .emi-calculator-container {
+    background: var(--section-bg-light);
+    color: var(--text-light);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  body.dark .emi-calculator-container {
+    background: var(--section-bg-dark);
+    color: var(--text-dark);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.05);
+  }
+  /* Beautiful Calculate Button */
+  #calculate-btn {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: var(--primary) !important;
+    color: white !important;
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px rgba(59, 130, 246, 0.4);
+    transition: all 0.3s ease-in-out;
+    transform: translateY(0);
+  }
+  #calculate-btn:hover {
+    box-shadow: 0 15px 20px rgba(59, 130, 246, 0.5);
+    transform: translateY(-5px);
+    background-color: var(--secondary) !important;
+  }
+  body.dark #calculate-btn {
+    background-color: var(--primary) !important;
+    box-shadow: 0 10px 15px rgba(96, 165, 250, 0.3);
+  }
+  body.dark #calculate-btn:hover {
+    background-color: var(--secondary) !important;
+    box-shadow: 0 15px 20px rgba(96, 165, 250, 0.4);
+  }
 
-        /* Dark mode variables */
-        body.dark {
-            --bg-color: #1f2937; /* Tailwind gray-800 */
-            --text-color: #f3f4f6; /* Tailwind gray-100 */
-            --card-bg: #374151; /* Tailwind gray-700 */
-            --primary-accent: #f87171; /* Tailwind red-400 */
-            --secondary-accent: #ef4444; /* Tailwind red-500 */
-            --border-color: #4b5563; /* Tailwind gray-600 */
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --input-bg: #4b5563; /* Tailwind gray-600 */
-            --input-border: #6b7280; /* Tailwind gray-500 */
-            --section-bg: #4b5563; /* Tailwind gray-600 for results cards */
-        }
-
-        /* Apply theme variables */
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-
-        .emi-calculator-container {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            box-shadow: 0 4px 20px var(--shadow-color);
-        }
-
-        /* Style for range input thumb and track (cross-browser) */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 8px;
-            background: var(--border-color);
-            outline: none;
-            opacity: 0.9; /* Slightly more opaque */
-            transition: opacity .2s;
-            border-radius: 4px;
-        }
-
-        input[type="range"]:hover {
-            opacity: 1;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--primary-accent);
-            cursor: pointer;
-            border-radius: 50%;
-            border: 3px solid var(--card-bg); /* Adds a more prominent ring effect */
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: var(--primary-accent);
-            cursor: pointer;
-            border-radius: 50%;
-            border: 3px solid var(--card-bg);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-         /* Style for select and number input background/border in dark mode */
-        body.dark .emi-inputs select,
-        body.dark .emi-inputs input[type="number"] {
-             background-color: var(--input-bg);
-             color: var(--text-color);
-             border-color: var(--input-border);
-        }
-
-         /* Ensure chart text color adapts - Chart.js options are primary */
-        .emi-results canvas {
-             /* This rule is less critical as Chart.js options are used */
-             color: var(--text-color);
-        }
-
-        /* Responsive adjustments for input layout */
-        @media (max-width: 640px) {
-            .emi-inputs .flex.items-center.gap-4 {
-                flex-direction: column; /* Stack range and number input on small screens */
-                align-items: flex-start; /* Align items to the start */
-                gap: 0.5rem; /* Reduce gap */
-            }
-            .emi-inputs input[type="range"] {
-                width: 100%; /* Range takes full width */
-            }
-             .emi-inputs input[type="number"] {
-                 width: 100%; /* Number input takes full width */
-                 text-align: left; /* Align number input text to left */
-             }
-        }
-
-        /* Explicit rule to ensure calculate button is displayed */
-        #calculate-btn {
-            display: block !important; /* Ensure it's a block element */
-            /* Tailwind classes already handle other styling like width, background, color, padding, etc. */
-        }
-
-
-    </style>
+  /* Enhanced digits in dark mode (more colorful & visible) */
+  body.dark #monthly-emi {
+    color: #60a5fa !important; /* blue-400 */
+  }
+  body.dark #total-interest {
+    color: #fbbf24 !important; /* amber-400 */
+  }
+  body.dark #total-payment {
+    color: #34d399 !important; /* green-400 */
+  }
+  body.dark input[type="number"],
+  body.dark input[type="range"] {
+    color: #f9fafb !important;
+    background-color: #374151 !important;
+    border-color: #6b7280 !important;
+  }
+</style>
 </head>
+
 <body class="transition-colors duration-300">
 
-    <div class="emi-calculator-container max-w-2xl mx-auto my-8 p-6 md:p-8 rounded-xl shadow-lg transition-colors duration-300">
+<div class="emi-calculator-container max-w-2xl mx-auto my-10 p-6 md:p-8 rounded-2xl shadow-lg">
 
-        <header class="emi-header flex justify-between items-center mb-6 border-b pb-4 border-border-color">
-            <h1 class="text-2xl md:text-3xl font-bold text-primary-accent">📊 Smart EMI Calculator</h1>
-            <button id="theme-toggle" class="text-xl p-2 rounded-lg bg-primary-accent text-white hover:bg-secondary-accent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-opacity-50" aria-label="Toggle Theme">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                  <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.851l-1.724 3.459a2.25 2.25 0 0 0-.387 1.01l-.173 1.035a3.75 3.75 0 0 1 1.03 4.84L9.528 1.718ZM12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M8.792 4.46a.75.75 0 0 1 .162.851l-1.724 3.459a2.25 2.25 0 0 0-.387 1.01l-.173 1.035a3.75 3.75 0 0 1 1.03 4.84L8.792 4.46ZM17.208 4.46a.75.75 0 0 0-.162.851l1.724 3.459a2.25 2.25 0 0 0 .387 1.01l-.173 1.035a3.75 3.75 0 0 0-1.03 4.84L17.208 4.46ZM12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Z" clip-rule="evenodd" />
-                  <path d="M18.75 19.5h-13.5a.75.75 0 0 0 0 1.5h13.5a.75.75 0 0 0 0-1.5Z" />
-                </svg>
-            </button>
-        </header>
+<header class="flex justify-between items-center mb-6 pb-4 border-b">
+  <h1 class="text-3xl font-bold text-blue-600">📊 Smart EMI Calculator</h1>
+  <button id="theme-toggle" class="bg-blue-500 hover:bg-blue-600 p-2 rounded-full text-white">
+    🌙
+  </button>
+</header>
 
-        <section class="emi-inputs space-y-6">
-            <div>
-                <label for="loan-amount" class="block mb-2 font-semibold text-text-color">Loan Amount (<span id="currency-symbol">₹</span>):</label>
-                <div class="flex items-center gap-4">
-                     <input type="range" id="loan-amount" min="10000" max="10000000" step="1000" value="500000" class="flex-grow">
-                     <input type="number" id="loan-amount-num" min="10000" max="10000000" step="1000" value="500000" class="w-32 p-2 border rounded-md text-right focus:outline-none focus:ring-2 focus:ring-primary-accent border-input-border bg-input-bg text-text-color">
-                </div>
-                 <span id="loan-amount-val" class="block text-right font-bold text-primary-accent mt-1 hidden">500000</span>
-            </div>
-
-            <div>
-                <label for="interest-rate" class="block mb-2 font-semibold text-text-color">Interest Rate (% per annum):</label>
-                 <div class="flex items-center gap-4">
-                    <input type="range" id="interest-rate" min="1" max="20" step="0.1" value="8.5" class="flex-grow">
-                     <input type="number" id="interest-rate-num" min="1" max="20" step="0.1" value="8.5" class="w-24 p-2 border rounded-md text-right focus:outline-none focus:ring-2 focus:ring-primary-accent border-input-border bg-input-bg text-text-color">
-                 </div>
-                <span id="interest-rate-val" class="block text-right font-bold text-primary-accent mt-1 hidden">8.5</span>
-            </div>
-
-            <div>
-                <label for="loan-tenure" class="block mb-2 font-semibold text-text-color">Loan Tenure (in months):</label>
-                 <div class="flex items-center gap-4">
-                    <input type="range" id="loan-tenure" min="6" max="360" step="6" value="120" class="flex-grow">
-                     <input type="number" id="loan-tenure-num" min="6" max="360" step="6" value="120" class="w-24 p-2 border rounded-md text-right focus:outline-none focus:ring-2 focus:ring-primary-accent border-input-border bg-input-bg text-text-color">
-                 </div>
-                <span id="loan-tenure-val" class="block text-right font-bold text-primary-accent mt-1 hidden">120</span>
-            </div>
-
-            <div>
-                <label for="currency-select" class="block mb-2 font-semibold text-text-color">Select Currency:</label>
-                <select id="currency-select" class="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-accent border-input-border bg-input-bg text-text-color">
-                    <option value="₹">INR (₹)</option>
-                    <option value="$">USD ($)</option>
-                    <option value="£">GBP (£)</option>
-                    <option value="€">EUR (€)</option>
-                </select>
-            </div>
-
-            <button id="calculate-btn" class="w-full bg-primary-accent text-white font-bold py-3 px-4 rounded-lg hover:bg-secondary-accent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-opacity-50" aria-label="Calculate Loan EMI">
-                Calculate EMI
-            </button>
-        </section>
-
-        <section class="emi-results mt-8 pt-6 border-t border-border-color text-center">
-            <h2 class="text-xl md:text-2xl font-bold mb-4 text-primary-accent">📋 EMI Details</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div class="p-4 rounded-lg bg-section-bg shadow-sm"> <p class="text-sm font-semibold text-gray-600 dark:text-gray-300">Monthly EMI:</p>
-                    <p class="text-lg md:text-xl font-bold text-primary-accent" id="monthly-emi">-</p>
-                </div>
-                 <div class="p-4 rounded-lg bg-section-bg shadow-sm">
-                    <p class="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Interest:</p>
-                    <p class="text-lg md:text-xl font-bold text-yellow-600 dark:text-yellow-400" id="total-interest">-</p>
-                </div>
-                 <div class="p-4 rounded-lg bg-section-bg shadow-sm">
-                    <p class="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Payment:</p>
-                    <p class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400" id="total-payment">-</p>
-                </div>
-            </div>
-
-
-            <div class="chart-container w-full max-w-sm mx-auto mb-6">
-                 <canvas id="emi-chart" aria-label="Loan Principal vs Interest Chart" role="img"></canvas>
-            </div>
-
-
-            <button id="download-pdf" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" aria-label="Export EMI Report to PDF">
-                📄 Export to PDF
-            </button>
-        </section>
+<section class="emi-inputs space-y-6">
+  <div>
+    <label class="block mb-2 font-semibold">Loan Amount (₹):</label>
+    <div class="flex items-center gap-4">
+      <input type="range" id="loan-amount" min="10000" max="10000000" step="1000" value="500000" class="flex-grow">
+      <input type="number" id="loan-amount-num" min="10000" max="10000000" step="1000" value="500000" class="w-32 p-2 border rounded text-right">
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <div>
+    <label class="block mb-2 font-semibold">Interest Rate (%):</label>
+    <div class="flex items-center gap-4">
+      <input type="range" id="interest-rate" min="1" max="20" step="0.1" value="8.5" class="flex-grow">
+      <input type="number" id="interest-rate-num" min="1" max="20" step="0.1" value="8.5" class="w-24 p-2 border rounded text-right">
+    </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get DOM elements
-            const loanAmountInput = document.getElementById('loan-amount');
-            const interestRateInput = document.getElementById('interest-rate');
-            const loanTenureInput = document.getElementById('loan-tenure');
-            const loanAmountNum = document.getElementById('loan-amount-num');
-            const interestRateNum = document.getElementById('interest-rate-num');
-            const loanTenureNum = document.getElementById('loan-tenure-num');
+  <div>
+    <label class="block mb-2 font-semibold">Loan Tenure (Months):</label>
+    <div class="flex items-center gap-4">
+      <input type="range" id="loan-tenure" min="6" max="360" step="6" value="120" class="flex-grow">
+      <input type="number" id="loan-tenure-num" min="6" max="360" step="6" value="120" class="w-24 p-2 border rounded text-right">
+    </div>
+  </div>
 
-            const calculateBtn = document.getElementById('calculate-btn');
-            const currencySelect = document.getElementById('currency-select');
+  <button id="calculate-btn">Calculate EMI</button>
+</section>
 
-            const currencySymbolSpan = document.getElementById('currency-symbol');
+<section class="emi-results mt-10 pt-6 border-t text-center">
+  <h2 class="text-2xl font-bold mb-4 text-blue-600">📋 EMI Details</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="p-4 rounded bg-gray-100 dark:bg-gray-700">
+      <p class="text-sm font-semibold">Monthly EMI</p>
+      <p id="monthly-emi" class="text-xl font-bold text-blue-600">-</p>
+    </div>
+    <div class="p-4 rounded bg-gray-100 dark:bg-gray-700">
+      <p class="text-sm font-semibold">Total Interest</p>
+      <p id="total-interest" class="text-xl font-bold text-yellow-500">-</p>
+    </div>
+    <div class="p-4 rounded bg-gray-100 dark:bg-gray-700">
+      <p class="text-sm font-semibold">Total Payment</p>
+      <p id="total-payment" class="text-xl font-bold text-green-500">-</p>
+    </div>
+  </div>
 
-            const monthlyEMISpan = document.getElementById('monthly-emi');
-            const totalInterestSpan = document.getElementById('total-interest');
-            const totalPaymentSpan = document.getElementById('total-payment');
+  <div class="mt-8 w-full max-w-md mx-auto">
+    <canvas id="emi-chart"></canvas>
+  </div>
 
-            const chartCanvas = document.getElementById('emi-chart');
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const downloadBtn = document.getElementById('download-pdf');
+</section>
 
-            let emiChart; // Variable to hold the Chart.js instance
+</div>
 
-            // --- Sync Range and Number Inputs ---
-            function syncInputs(rangeInput, numInput) {
-                numInput.value = rangeInput.value;
-            }
+<!-- JS Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            function syncInputsReverse(rangeInput, numInput) {
-                 let value = parseFloat(numInput.value);
-                 const min = parseFloat(numInput.min);
-                 const max = parseFloat(numInput.max);
-                 if (value < min) value = min;
-                 if (value > max) value = max;
-                 numInput.value = value; // Update input value
-                 rangeInput.value = value; // Sync slider
-            }
+<!-- App Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loanAmount = document.getElementById('loan-amount');
+  const loanAmountNum = document.getElementById('loan-amount-num');
+  const interestRate = document.getElementById('interest-rate');
+  const interestRateNum = document.getElementById('interest-rate-num');
+  const loanTenure = document.getElementById('loan-tenure');
+  const loanTenureNum = document.getElementById('loan-tenure-num');
 
-            loanAmountInput.addEventListener('input', () => syncInputs(loanAmountInput, loanAmountNum));
-            loanAmountNum.addEventListener('input', () => syncInputsReverse(loanAmountInput, loanAmountNum));
+  const monthlyEMI = document.getElementById('monthly-emi');
+  const totalInterest = document.getElementById('total-interest');
+  const totalPayment = document.getElementById('total-payment');
 
-            interestRateInput.addEventListener('input', () => syncInputs(interestRateInput, interestRateNum));
-            interestRateNum.addEventListener('input', () => syncInputsReverse(interestRateInput, interestRateNum));
+  const calculateBtn = document.getElementById('calculate-btn');
+  const themeToggle = document.getElementById('theme-toggle');
 
-            loanTenureInput.addEventListener('input', () => syncInputs(loanTenureInput, loanTenureNum));
-             loanTenureNum.addEventListener('input', () => syncInputsReverse(loanTenureInput, loanTenureNum));
+  const ctx = document.getElementById('emi-chart').getContext('2d');
+  let chart;
 
+  function syncInputs(slider, input) {
+    input.value = slider.value;
+  }
+  function syncInputsReverse(slider, input) {
+    slider.value = input.value;
+  }
 
-            // --- Event Listener for Currency Select ---
-            currencySelect.addEventListener('change', () => {
-                currencySymbolSpan.textContent = currencySelect.value;
-                // Re-calculate and update results with new symbol if values are already displayed
-                if (monthlyEMISpan.textContent !== '-') {
-                     calculateEMI(); // Call calculate function to update displayed values
-                }
-            });
+  loanAmount.addEventListener('input', () => syncInputs(loanAmount, loanAmountNum));
+  loanAmountNum.addEventListener('input', () => syncInputsReverse(loanAmount, loanAmountNum));
 
-            // --- EMI Calculation Function ---
-            function calculateEMI() {
-                const P = parseFloat(loanAmountInput.value); // Principal Loan Amount
-                const annualRate = parseFloat(interestRateInput.value); // Annual Interest Rate (%)
-                const N = parseInt(loanTenureInput.value); // Loan Tenure (in months)
+  interestRate.addEventListener('input', () => syncInputs(interestRate, interestRateNum));
+  interestRateNum.addEventListener('input', () => syncInputsReverse(interestRate, interestRateNum));
 
-                 // Basic Input Validation
-                 if (isNaN(P) || P <= 0 || isNaN(annualRate) || annualRate < 0 || isNaN(N) || N <= 0) {
-                     showMessageBox("Please enter valid positive numbers for all inputs.");
-                     return;
-                 }
+  loanTenure.addEventListener('input', () => syncInputs(loanTenure, loanTenureNum));
+  loanTenureNum.addEventListener('input', () => syncInputsReverse(loanTenure, loanTenureNum));
 
-                const R = annualRate / 12 / 100;
+  function calculateEMI() {
+    const P = parseFloat(loanAmount.value);
+    const r = parseFloat(interestRate.value) / 12 / 100;
+    const n = parseInt(loanTenure.value);
 
-                let EMI;
-                if (R === 0) {
-                    EMI = P / N;
-                } else {
-                    EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-                }
+    let emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    let total = emi * n;
+    let interest = total - P;
 
-                const total = EMI * N;
-                const interest = total - P;
+    monthlyEMI.textContent = `₹ ${emi.toFixed(2)}`;
+    totalInterest.textContent = `₹ ${interest.toFixed(2)}`;
+    totalPayment.textContent = `₹ ${total.toFixed(2)}`;
 
-                const symbol = currencySelect.value;
+    updateChart(P, interest);
+  }
 
-                // Update results spans, format with locale for better readability
-                monthlyEMISpan.textContent = `${symbol} ${EMI.toFixed(2).toLocaleString('en-IN')}`;
-                totalInterestSpan.textContent = `${symbol} ${interest.toFixed(2).toLocaleString('en-IN')}`;
-                totalPaymentSpan.textContent = `${symbol} ${total.toFixed(2).toLocaleString('en-IN')}`;
+  function updateChart(principal, interest) {
+    if (chart) chart.destroy();
+    chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Principal', 'Interest'],
+        datasets: [{
+          data: [principal, interest],
+          backgroundColor: ['#3b82f6', '#f59e0b']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
 
-                updateChart(P, interest);
-            }
+  calculateBtn.addEventListener('click', calculateEMI);
 
-            // --- Auto-Calculate on Input Change ---
-            loanAmountInput.addEventListener('input', calculateEMI);
-            loanAmountNum.addEventListener('input', calculateEMI);
-            interestRateInput.addEventListener('input', calculateEMI);
-            interestRateNum.addEventListener('input', calculateEMI);
-            loanTenureInput.addEventListener('input', calculateEMI);
-            loanTenureNum.addEventListener('input', calculateEMI);
-            currencySelect.addEventListener('change', calculateEMI); // Also recalculate if currency changes
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    if (chart) {
+      const p = parseFloat(loanAmount.value);
+      const r = parseFloat(interestRate.value) / 12 / 100;
+      const n = parseInt(loanTenure.value);
+      const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      const total = emi * n;
+      const interest = total - p;
+      updateChart(p, interest);
+    }
+  });
 
-            // --- Event Listener for Calculate Button (Still keeps the button functionality) ---
-            calculateBtn.addEventListener('click', calculateEMI);
+  calculateEMI(); // initial
+});
+</script>
 
-
-            // --- Chart Update Function ---
-            function updateChart(principal, interest) {
-                if (emiChart) {
-                    emiChart.destroy();
-                }
-
-                const isDarkMode = document.body.classList.contains('dark');
-                const textColor = isDarkMode ? 'rgb(243, 244, 246)' : 'rgb(51, 65, 85)';
-                const principalColor = isDarkMode ? 'rgb(248, 113, 113)' : 'rgb(239, 68, 68)';
-                const interestColor = isDarkMode ? 'rgb(251, 191, 36)' : 'rgb(245, 158, 11)';
-
-                emiChart = new Chart(chartCanvas, {
-                    type: 'pie',
-                    data: {
-                        labels: ['Principal', 'Interest'],
-                        datasets: [{
-                            data: [principal, interest],
-                            backgroundColor: [principalColor, interestColor],
-                            hoverBackgroundColor: [
-                                isDarkMode ? 'rgb(239, 68, 68)' : 'rgb(220, 38, 38)',
-                                isDarkMode ? 'rgb(245, 158, 11)' : 'rgb(217, 119, 6)'
-                            ],
-                            borderColor: isDarkMode ? 'rgb(55, 65, 81)' : 'rgb(255, 255, 255)',
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: textColor
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(tooltipItem) {
-                                        const label = tooltipItem.label || '';
-                                        const value = tooltipItem.raw;
-                                        const symbol = currencySelect.value;
-                                        return `${label}: ${symbol} ${value.toFixed(2).toLocaleString('en-IN')}`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-
-            // --- Theme Toggle Functionality ---
-            themeToggleBtn.addEventListener('click', () => {
-                document.body.classList.toggle('dark');
-                 // Optional: Save theme preference to localStorage
-                 // localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-
-                 if(emiChart) {
-                     const P = parseFloat(loanAmountInput.value);
-                     const annualRate = parseFloat(interestRateInput.value);
-                     const N = parseInt(loanTenureInput.value);
-                      const R = annualRate / 12 / 100;
-                      let EMI;
-                      if (R === 0) { EMI = P / N; } else { EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1); }
-                      const interest = (EMI * N) - P;
-                     updateChart(P, interest);
-                 }
-            });
-
-            // if (localStorage.getItem('theme') === 'dark') {
-            //     document.body.classList.add('dark');
-            // }
-
-
-            // --- PDF Download Functionality ---
-            downloadBtn.addEventListener('click', () => {
-                if (!window.jspdf || !window.jspdf.jsPDF) {
-                    console.error("jsPDF library not loaded.");
-                    return;
-                }
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-                const symbol = currencySelect.value;
-
-                pdf.setFontSize(18);
-                pdf.text("Loan EMI Report", 105, 20, null, null, "center");
-
-                pdf.setFontSize(12);
-                let yPos = 40;
-
-                pdf.text(`Loan Amount: ${symbol} ${parseFloat(loanAmountNum.value).toLocaleString('en-IN')}`, 20, yPos); yPos += 10;
-                pdf.text(`Interest Rate: ${parseFloat(interestRateNum.value)}% per annum`, 20, yPos); yPos += 10;
-                pdf.text(`Tenure: ${parseInt(loanTenureNum.value)} months`, 20, yPos); yPos += 20;
-
-                if (monthlyEMISpan.textContent !== '-') {
-                     pdf.setFontSize(14);
-                     pdf.text(`Monthly EMI: ${monthlyEMISpan.textContent}`, 20, yPos); yPos += 10;
-                     pdf.text(`Total Interest Payable: ${totalInterestSpan.textContent}`, 20, yPos); yPos += 10;
-                     pdf.text(`Total Payment (Principal + Interest): ${totalPaymentSpan.textContent}`, 20, yPos); yPos += 20;
-                } else {
-                     pdf.text("Please calculate EMI first.", 20, yPos); yPos += 20;
-                }
-
-                const chartImage = chartCanvas.toDataURL('image/png');
-                if (chartImage) {
-                     const imgWidth = 100;
-                     const imgHeight = chartCanvas.height * imgWidth / chartCanvas.width;
-                    pdf.addImage(chartImage, 'PNG', (pdf.internal.pageSize.getWidth() - imgWidth) / 2, yPos, imgWidth, imgHeight);
-                }
-
-                pdf.save("emi-report.pdf");
-            });
-
-            // --- Simple Message Box Function (Replacement for alert) ---
-            function showMessageBox(message) {
-                 console.log("Message:", message);
-                 alert(message);
-            }
-
-
-             // --- Initial Setup ---
-             // Sync number inputs with initial slider values on load
-             syncInputs(loanAmountInput, loanAmountNum);
-             syncInputs(interestRateInput, interestRateNum);
-             syncInputs(loanTenureInput, loanTenureNum);
-
-
-             // Optional: Apply theme preference from localStorage on load
-            // if (localStorage.getItem('theme') === 'dark') {
-            //     document.body.classList.add('dark');
-            // }
-
-             // Trigger initial calculation on load
-             calculateEMI();
-
-        });
-    </script>
+</body>
+</html>
